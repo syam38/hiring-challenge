@@ -6,27 +6,35 @@ import {
   MetaReducer,
   createReducer,
   on,
-  Action
+  Action,
+  State
 } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
 import { Job, Error } from 'src/app/models';
 import { fetchJobsSuccess, fetchJobsFailure } from '../actions';
 
-export interface State {
+export interface JobsState {
   jobs: Job[],
   error: Error
 }
 
-const initialState: State = {
+const initialState: JobsState = {
   jobs: [],
   error: null
 }
 
-export const reducers: ActionReducer<State | undefined, Action> = createReducer(initialState,
+// export const selectFeature = (state: JobsState) => state;
+ 
+export const selectJobs = createSelector(
+  (state) => state,
+  (state: JobsState) => state.jobs
+);
+
+export const reducers: ActionReducer<JobsState | undefined, Action> = createReducer(initialState,
   on(fetchJobsSuccess, (state, { payload }) => ({ ...state, jobs: payload.jobs })),
   on(fetchJobsFailure, (state, { payload }) => ({ ...state, err: payload.error, jobs:[] })),
 );
 
 
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
+export const metaReducers: MetaReducer<JobsState>[] = !environment.production ? [] : [];

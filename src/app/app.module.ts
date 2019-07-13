@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './db/db.service';
+import { EffectsModule } from '@ngrx/effects';
+import { JobEffects } from './store/effects/jobs.effects';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { InMemoryDataService } from './db/db.service';
     StoreModule.forRoot({
       'jobs': reducers
     }),
+    EffectsModule.forRoot([JobEffects]),
     HttpClientModule,
     environment.production ?
       HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { delay: 100 }) : []
