@@ -22,11 +22,11 @@ const initialState: JobsState = {
   jobs: [],
   error: null
 }
-
-// export const selectFeature = (state: JobsState) => state;
  
+export const selectJobsFeature = createFeatureSelector<JobsState>('jobs');
+
 export const selectJobs = createSelector(
-  (state) => state,
+  selectJobsFeature,
   (state: JobsState) => state.jobs
 );
 
