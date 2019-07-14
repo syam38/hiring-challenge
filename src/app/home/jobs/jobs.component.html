@@ -1,39 +1,51 @@
-<div>
+<div class="search">
+<div class="search-name">
     <mat-form-field>
-      <input matInput type="text" (keyup)="filter($event.target.value)" placeholder="Filter">
+        <input matInput type="text" [formControl]="nameFilter" placeholder="Filter by name">
     </mat-form-field>
-  </div>
-  
+</div>
 
+<div class="search-date">
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Filter by date" [formControl]="dateFilter">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+</div>
+</div>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="Application Name">
+    <ng-container matColumnDef="applicationName">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.applicationName}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Scheduled Start Time">
+    <ng-container matColumnDef="scheduledStartTime">
         <th mat-header-cell *matHeaderCellDef> Scheduled Start Time </th>
-        <td mat-cell *matCellDef="let element"> {{element.scheduledStartTime | date}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.scheduledStartTime }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Scheduled End Time">
+    <ng-container matColumnDef="scheduledEndTime">
         <th mat-header-cell *matHeaderCellDef> Scheduled End Time </th>
-        <td mat-cell *matCellDef="let element"> {{element.scheduledEndTime | date }} </td>
+        <td mat-cell *matCellDef="let element"> {{element.scheduledEndTime }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Actual Start Time">
+    <ng-container matColumnDef="actualStartTime">
         <th mat-header-cell *matHeaderCellDef> Actual Start Time </th>
-        <td mat-cell *matCellDef="let element"> {{element.actualStartTime | date}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.actualStartTime }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Actual End Time">
+    <ng-container matColumnDef="actualEndTime">
         <th mat-header-cell *matHeaderCellDef> Actual End Time </th>
-        <td mat-cell *matCellDef="let element"> {{element.actualEndTime | date }} </td>
+        <td mat-cell *matCellDef="let element"> {{element.actualEndTime  }} </td>
     </ng-container>
 
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.status  }} </td>
+    </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="row.color"></tr>
 </table>
