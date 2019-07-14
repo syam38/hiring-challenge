@@ -1,0 +1,36 @@
+<div class="container">
+    <h3 mat-dialog-title> Edit Job </h3>
+
+    <form class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm">
+
+        <div class="form">
+            <mat-form-field color="accent">
+                <input matInput #input class="form-control" placeholder="Application Name" [(ngModel)]="data.applicationName" name="id" required>
+                <mat-error *ngIf="formControl.invalid"></mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="form">
+            <mat-form-field color="accent">
+                <input matInput #input class="form-control" placeholder="Start Time" [(ngModel)]="data.startTime" name="startTime"
+                    required>
+                <mat-error *ngIf="formControl.invalid"></mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="form">
+            <mat-form-field color="accent">
+                <input matInput #inputstate class="form-control" placeholder="End Time" [(ngModel)]="data.endTime"
+                    name="endTime" maxlength="10" required>
+                <mat-error *ngIf="formControl.invalid"></mat-error>
+                <mat-hint align="end"></mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div mat-dialog-actions>
+            <button mat-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1"
+                (click)="save()">Save</button>
+            <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+        </div>
+    </form>
+</div>

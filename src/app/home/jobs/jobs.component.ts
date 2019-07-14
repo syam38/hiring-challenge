@@ -3,9 +3,10 @@ import { Store, State, select } from '@ngrx/store';
 import { JobsState, selectJobs } from 'src/app/store/reducers';
 import { fetchJobs } from 'src/app/store/actions';
 import { Job, StatusColor } from 'src/app/models';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { FormControl } from '@angular/forms';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-jobs',
@@ -15,25 +16,25 @@ import { FormControl } from '@angular/forms';
 })
 export class JobsComponent implements OnInit {
   jobs: Job[];
-  displayedColumns: string[] = ['applicationName', 'scheduledStartTime', 'scheduledEndTime', 'actualStartTime', 'actualEndTime', 'status'];
+  displayedColumns: string[] = ['applicationName', 'scheduledStartTime', 'scheduledEndTime', 'actualStartTime', 'actualEndTime', 'status', 'action'];
   dataSource: MatTableDataSource<Job>;
-  constructor(private store$: Store<JobsState>, private datepipe: DatePipe) { }
+  constructor(private store$: Store<JobsState>, private datepipe: DatePipe, private dialog: MatDialog) { }
   filteredValues = {
     applicationName: '', scheduledStartTime: '', scheduledEndTime: '',
     actualStartTime: '', actualEndTime: ''
   };
   nameFilter = new FormControl('');
   dateFilter = new FormControl('');
+
   ngOnInit() {
     this.store$.dispatch(fetchJobs());
     this.store$.pipe(select(selectJobs)).subscribe((jobs: Job[]) => {
       if (jobs.length > 0) {
-        console.log(jobs);
         jobs.forEach((j) => {
-          j.scheduledStartTime = this.datepipe.transform(j.scheduledStartTime, 'd/M/yyyy')
-          j.scheduledEndTime = this.datepipe.transform(j.scheduledEndTime, 'd/M/yyyy')
-          j.actualStartTime = this.datepipe.transform(j.actualStartTime, 'd/M/yyyy')
-          j.actualEndTime = this.datepipe.transform(j.actualEndTime, 'd/M/yyyy')
+          j.scheduledStartTime = new Date(j.scheduledStartTime)
+          j.scheduledEndTime = new Date(j.scheduledEndTime)
+          j.actualStartTime = new Date(j.actualStartTime)
+          j.actualEndTime = new Date(j.actualEndTime)
           j.color = this.mapStatusColor(j.status)
         });
         this.dataSource = new MatTableDataSource(jobs);
@@ -51,7 +52,7 @@ export class JobsComponent implements OnInit {
     this.dateFilter.valueChanges
       .subscribe(
         date => {
-          this.filteredValues.scheduledStartTime = this.datepipe.transform(date, 'd/M/yyyy');
+          this.filteredValues.scheduledStartTime = date;
           this.dataSource.filter = JSON.stringify(this.filteredValues);
         }
       )
@@ -61,13 +62,13 @@ export class JobsComponent implements OnInit {
   tableFilter(): (data: any, filter: string) => boolean {
     let filterFunction = (data, filter): boolean => {
       let searchTerms = this.filteredValues;
-      if (searchTerms.applicationName.length > 0 && searchTerms.scheduledStartTime.length > 0) {
+      if (searchTerms.applicationName.length > 0 && searchTerms.scheduledStartTime.toString().length > 0) {
         return data.applicationName.toLowerCase().includes(searchTerms.applicationName.toLowerCase()) &&
-          data.scheduledStartTime === searchTerms.scheduledStartTime;
+          data.scheduledStartTime.toDateString() === new Date(searchTerms.scheduledStartTime).toDateString();
       } else if (searchTerms.applicationName.length > 0) {
         return data.applicationName.toLowerCase().includes(searchTerms.applicationName.toLowerCase());
-      } else if (searchTerms.scheduledStartTime.length > 0) {
-        return data.scheduledStartTime === searchTerms.scheduledStartTime;
+      } else if (searchTerms.scheduledStartTime.toString().length > 0) {
+        return data.scheduledStartTime.toDateString() === new Date(searchTerms.scheduledStartTime).toDateString();
       }
       return true;
     }
@@ -93,6 +94,17 @@ export class JobsComponent implements OnInit {
         break;
     }
     return color
+  }
+
+  startEdit(id, applicationName, startTime, endTime) {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      data: { id: id, applicationName:  applicationName, startTime: startTime, endTime: endTime}
+    } );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+      }
+    });
   }
 
 

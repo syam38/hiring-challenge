@@ -4,3 +4,4 @@ import { Job } from 'src/app/models';
 export const fetchJobs = createAction('[Jobs] Fetch Jobs');
 export const fetchJobsSuccess = createAction('[Jobs] Fetch Jobs Success', props<{payload: { jobs: Job[] }}>());
 export const fetchJobsFailure = createAction('[Jobs] Fetch Jobs Failure', props<{payload: { error: Error }}>());
+export const modifyJob = createAction('[Jobs] Modify Job', props<{payload: { job: Job }}>());

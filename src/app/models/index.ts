@@ -1,12 +1,12 @@
 export interface Job {
     id: string,
     applicationName: string,
-    scheduledStartTime: string,
-    scheduledEndTime: string,
-    actualStartTime: string,
-    actualEndTime: string,
-    status: string,
-    color: string
+    scheduledStartTime: Date,
+    scheduledEndTime: Date,
+    actualStartTime?: Date,
+    actualEndTime?: Date,
+    status?: string,
+    color?: string
 }
 
 export interface Error {
