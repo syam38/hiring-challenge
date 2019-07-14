@@ -5,25 +5,29 @@
 
         <div class="form">
             <mat-form-field color="accent">
-                <input matInput #input class="form-control" placeholder="Application Name" [(ngModel)]="data.applicationName" name="id" required>
-                <mat-error *ngIf="formControl.invalid"></mat-error>
+                <input matInput #input class="form-control" placeholder="Application Name"
+                    [(ngModel)]="data.applicationName" name="id" required>
+                <mat-error *ngIf="formControl.invalid">Name is reuired</mat-error>
             </mat-form-field>
         </div>
 
         <div class="form">
             <mat-form-field color="accent">
-                <input matInput #input class="form-control" placeholder="Start Time" [(ngModel)]="data.startTime" name="startTime"
-                    required>
-                <mat-error *ngIf="formControl.invalid"></mat-error>
+                <input matInput #input [matDatepicker]="startTimePicker" class="form-control" placeholder="Start Time" [(ngModel)]="data.startTime"
+                    name="startTime" required>
+                <mat-datepicker-toggle matSuffix [for]="startTimePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startTimePicker></mat-datepicker>
+                <mat-error *ngIf="formControl.invalid"> Start date is reuired</mat-error>
             </mat-form-field>
         </div>
 
         <div class="form">
             <mat-form-field color="accent">
-                <input matInput #inputstate class="form-control" placeholder="End Time" [(ngModel)]="data.endTime"
-                    name="endTime" maxlength="10" required>
-                <mat-error *ngIf="formControl.invalid"></mat-error>
-                <mat-hint align="end"></mat-hint>
+                <input matInput #inputstate [matDatepicker]="endTimepicker" class="form-control" placeholder="End Time" [(ngModel)]="data.endTime"
+                    name="endTime" required>
+                <mat-datepicker-toggle matSuffix [for]="endTimepicker"></mat-datepicker-toggle>
+                <mat-datepicker #endTimepicker></mat-datepicker>
+                <mat-error *ngIf="formControl.invalid"> End date is required</mat-error>
             </mat-form-field>
         </div>
 
